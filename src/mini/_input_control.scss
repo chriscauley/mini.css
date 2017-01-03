@@ -260,23 +260,30 @@ $hide-file-inputs: true !default;
 // Variables:
 // - $button-alt-name : The name of the class used for the alternate button.
 // - $button-alt-back-color : The background color of the alternate button.
-// - $button-alt-back-opacity : Opacity of the background color of the alternate button.
-// - $button-alt-hover-back-opacity : Opacity of the background color of the alternate button on hover.
+// - $button-alt-back-opacity : (Optional) Opacity of the background color of the alternate button. Defaults to 1.
+// - $button-alt-hover-back-opacity : (Optional) Opacity of the background color of the alternate button on hover. Defaults to 1.
 // - $button-alt-fore-color : (Optional) The text color of the alternate button. Defaults to the text color of the button.
 // Notes:
 // Due to something like `.button.secondary` being a higher specificity than `a.button` or `a`, no extra rules are
 // required for such elements. However rules for the normal button elements are applied in order to not require the
 // base class for the button styles.
-@mixin make-button-alt-color ($button-alt-name, $button-alt-back-color, $button-alt-back-opacity,
-	$button-alt-hover-back-opacity, $button-alt-fore-color: $button-fore-color) {
+@mixin make-button-alt-color ($button-alt-name, $button-alt-back-color, $button-alt-back-opacity: 1,
+	$button-alt-hover-back-opacity: 1, $button-alt-fore-color: $button-fore-color) {
 	button.#{$button-alt-name}, [type="button"].#{$button-alt-name}, [type="submit"].#{$button-alt-name}, 
 	[type="reset"].#{$button-alt-name}, .#{$button-class-name}.#{$button-alt-name} {
-		background: rgba($button-alt-back-color, $button-alt-back-opacity);
+		@if $button-alt-back-opacity !=1 {
+			background: rgba($button-alt-back-color, $button-alt-back-opacity);
+		}
+		@if $button-alt-back-opacity == 1 {
+			background: $button-alt-back-color;
+		}
 		@if $button-alt-fore-color != $button-fore-color {
 			color: $button-alt-fore-color;
 		}
-		&:hover, &:active, &:focus {
-			background: rgba($button-alt-back-color, $button-alt-hover-back-opacity);
+		@if $button-alt-hover-back-opacity !=1 {
+			&:hover, &:active, &:focus {
+				background: rgba($button-alt-back-color, $button-alt-hover-back-opacity);
+			}
 		}
 	}
 }
