@@ -287,6 +287,44 @@ $hide-file-inputs: true !default;
 		}
 	}
 }
+
+@mixin make-button-color ($button) {
+	/* Experimental button mixin that uses associative array instead of multiple arguments
+		 Takes one argument, $button
+		 $button: (
+			 name: string, // the className used to make button variant
+			 back-color: color, // background color of button variant
+			 fore-color: color, // text color of button variant
+			 back-opacity: 0-1, // optional opacity of button, will be mixed with back-color
+			 hover-back-color: color, // background color for hovering
+			 hover-back-opacity: 0-1, //optional opacity of hover state, will be mixed with hover-back-color
+		 )
+	*/
+	// pull out all the variables, mix as needed
+	$button-alt-name: map-get($button,name);
+	$button-alt-back-color: map-get($button,back-color);
+	@if map-has-key($button, back-opacity) {
+		$button-alt-back-opacity: map-get($button,back-opacity);
+		$button-alt-back-color: rgba($button-alt-back-color, $button-alt-back-opacity);
+	}
+	$button-alt-hover-back-color: map-get($button,hover-back-color);
+	@if map-has-key($button, hover-back-opacity) {
+		$button-alt-hover-back-opacity: map-get($button,hover-back-opacity);
+		$button-alt-hover-back-color: rgba($button-alt-hover-back-color, $button-alt-hover-back-opacity);
+	}
+	$button-alt-fore-color: map-get($button,fore-color);
+
+	// generate button variant css
+	button.#{$button-alt-name}, [type="button"].#{$button-alt-name}, [type="submit"].#{$button-alt-name},
+	[type="reset"].#{$button-alt-name}, .#{$button-class-name}.#{$button-alt-name} {
+		background: $button-alt-back-color;
+		color: $button-alt-fore-color;
+		&:hover, &:active, &:focus {
+			background: $button-alt-back-color;
+		}
+	}
+}
+
 // Mixin for alternate button styles (button style variants).
 // Variables:
 // - $button-alt-name : The name of the class used for the alternate button style.
